@@ -11,33 +11,28 @@ sock.bind(server_address)
 
 # Listen for incoming connections
 sock.listen(1)
-while True:
-    image = open("mytemp.jpg", "wb")
 
-    temp = bytearray()
-    while True:
+temp = bytearray()
+while True:
     # Wait for a connection
 
-        print (sys.stderr, 'waiting for a connection')
-        connection, client_address = sock.accept()
-
-        try:
-            print (sys.stderr, 'connection from', client_address)
-
-            # Receive the data in small chunks and retransmit it
-            while True:
-                data = connection.recv(3000)
-                temp += data
-                #print (sys.stderr, 'received "%s"' % data)
-                if not data:
-                    print (sys.stderr, 'no more data from', client_address)
-                    break
-            
-        finally:
-            # Clean up the connection
-            image.write(temp)
-            image.close()
-            connection.close()
-            temp = bytearray()
-            break
+    print (sys.stderr, 'waiting for a connection')
+    connection, client_address = sock.accept()
+    try:
+        print (sys.stderr, 'connection from', client_address)
+        temp = bytearray()
+        while True:
+            data = connection.recv(3000)
+            temp += data
+            if not data:
+                print (sys.stderr, 'no more data from', client_address)
+                break           
+    finally:
+        # Clean up the connection
+        image = open("mytemp.jpg", "wb")
+        image.write(temp)
+        image.close()
+        connection.close()
+        temp = bytearray()
+        break
 
