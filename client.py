@@ -10,10 +10,12 @@ print (sys.stderr, 'connecting to %s port %s' % server_address)
 sock.connect(server_address)
 
 try:
-    
+    sock.sendall('SERVICER'.encode())
     # Send data
     img = open("IMG_2957.JPG", "rb")
     sock.sendall(img.read())
+    img.close()
+
 
 finally:
     print (sys.stderr, 'closing socket')
